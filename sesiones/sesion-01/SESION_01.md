@@ -46,27 +46,492 @@ Bloque C (60 min) — Tú trabajas solo, yo superviso
 
 ---
 
-## [POWERPOINT] Diapositivas recomendadas para S1
+## [POWERPOINT] Contenido exacto de cada diapositiva
 
-| # | Título de la diapositiva | Contenido | Cuándo usarla |
-|---|---|---|---|
-| 1 | **Portada** | "Sesión 1: Diseño Técnico de Pruebas Automatizadas" + tu nombre + logo institución | Antes de empezar |
-| 2 | **Objetivo de hoy** | "Convertir requerimientos en casos de prueba usando EP, BVA, tablas de decisión y pairwise" | Inicio, 30 seg |
-| 3 | **El problema** | "300 tests. Todo pasa. Producción se rompe con $1,000. ¿Por qué?" | Bloque A, minuto 0-10 |
-| 4 | **3 preguntas antes de codificar** | 1) ¿Qué probar? 2) ¿Cuánto probar? 3) ¿Cómo demostrar que está probado? | Bloque A, minuto 5 |
-| 5 | **EP — Partición de Equivalencias** | Definición + ejemplo campo "edad" (18-65): 3 particiones, 1 valor por clase | Bloque A, minuto 10-15 |
-| 6 | **BVA — Valores Límite** | Definición + ejemplo edad: probar 17, 18, 65, 66. El error típico: `<` vs `<=` | Bloque A, minuto 15-20 |
-| 7 | **Tabla de Decisión** | Definición + ejemplo: 3 condiciones = 8 reglas. Destacar DT-R8 (tope 15%) | Bloque A, minuto 20-25 |
-| 8 | **Pairwise Testing** | "54 combinaciones → ~10 filas". Cubre cada par al menos una vez | Bloque A, minuto 25 |
-| 9 | **Trazabilidad** | Diagrama REQ → TC → DEF. "Si un test falla, lo rastreas en segundos" | Bloque A, minuto 25-35 |
-| 10 | **Demo: calculate_discount** | Screenshot de `discount.py` con las 5 reglas REQ-DSC-001..005 | Bloque A, minuto 35 |
-| 11 | **Estructura del laboratorio** | Diagrama de carpetas del proyecto + archivos clave | Bloque B, minuto 0 |
-| 12 | **Comandos** | `task setup` → `task test:design` / alternativamente `uv sync` → `uv run pytest -v` | Bloque B, minuto 0 |
-| 13 | **Ejercicio: SauceDemo Login** | Screenshot de saucedemo.com + tabla de lo que deben diseñar | Bloque C, minuto 0 |
-| 14 | **Mini reto: Pairwise web** | Los 4 parámetros + restricción + las 3 validaciones que debe tener el test | Bloque C, minuto 25 |
-| 15 | **Errores comunes** | Tabla de 7 errores (ver sección C.3) | Bloque C, minuto 45 |
-| 16 | **Checklist de salida** | Los 4 items finales (ver sección de cierre) | Últimos 5 min |
-| 17 | **Próxima sesión** | "S2: estos diseños se convierten en pruebas de UI con POM y Screenplay" | Últimos 2 min |
+> Cada diapositiva tiene: título, texto exacto que va en la slide, y nota de diseño.
+> El guion del instructor (qué decir en voz alta) NO va en la slide — está en el cuerpo de esta guía.
+
+---
+
+### SLIDE 1 — Portada
+
+**Título (grande, centrado):**
+```
+Sesión 1: Diseño Técnico de Pruebas Automatizadas
+```
+
+**Subtítulo:**
+```
+Certificación 3 — Ingeniería de Automatización: APIs, Performance y Seguridad
+```
+
+**Pie de página:**
+```
+Tu nombre · Institución · Fecha
+```
+
+**Diseño:** Logo de la institución en la esquina superior derecha. Fondo limpio, sin imágenes.
+
+---
+
+### SLIDE 2 — Objetivo de hoy
+
+**Título:**
+```
+¿Qué vas a aprender hoy?
+```
+
+**Texto (una sola frase, grande):**
+```
+Convertir requerimientos en casos de prueba
+antes de escribir una sola línea de código.
+```
+
+**Debajo, las 4 técnicas en una línea:**
+```
+EP · BVA · Tabla de Decisión · Pairwise
+```
+
+**Diseño:** Sin bullets, sin explicaciones. Solo la frase y los 4 nombres. El instructor los explica en voz alta.
+
+---
+
+### SLIDE 3 — El problema
+
+**Título:**
+```
+El problema
+```
+
+**Texto (grande, centrado, 3 líneas):**
+```
+300 tests automatizados.
+Todo pasa en verde.
+Producción se rompe con un pedido de $1,000.
+```
+
+**Pregunta debajo (en otro color):**
+```
+¿Por qué?
+```
+
+**Diseño:** Fondo oscuro, texto blanco grande. La pregunta en amarillo o naranja. Pausa dramática — dejar que los estudiantes respondan antes de cambiar de slide.
+
+---
+
+### SLIDE 4 — La respuesta
+
+**Título:**
+```
+Cantidad de tests ≠ Cobertura de diseño
+```
+
+**Texto (3 preguntas, una por línea):**
+```
+Antes de codificar, responde:
+
+1. ¿QUÉ probar?    → Las técnicas de diseño
+2. ¿CUÁNTO probar?  → Cobertura mínima suficiente
+3. ¿CÓMO demostrarlo? → La matriz de trazabilidad
+```
+
+**Diseño:** Las 3 preguntas numeradas. Las respuestas a la derecha en color distinto. Sin diagramas — el instructor explica cada una en voz alta.
+
+---
+
+### SLIDE 5 — EP: Partición de Equivalencias
+
+**Título:**
+```
+EP — Partición de Equivalencias
+```
+
+**Texto:**
+```
+Si todos los valores dentro de un rango producen el mismo resultado,
+basta probar UNO por grupo.
+```
+
+**Diagrama (dibujar en la slide):**
+```
+Campo "edad": acepta de 18 a 65
+
+ ❌ Inválido        ✅ Válido          ❌ Inválido
+┌───────────┐    ┌────────────┐    ┌───────────┐
+│  < 18     │    │  18 a 65   │    │  > 65     │
+│  ej: 10   │    │  ej: 30    │    │  ej: 70   │
+│  → error  │    │  → ok      │    │  → error  │
+└───────────┘    └────────────┘    └───────────┘
+     ↑                 ↑                 ↑
+  probar 1          probar 1          probar 1
+```
+
+**Nota al pie (en rojo):**
+```
+⚠️ Siempre incluir las particiones INVÁLIDAS.
+   Ahí viven los errores más frecuentes.
+```
+
+---
+
+### SLIDE 6 — BVA: Análisis de Valores Límite
+
+**Título:**
+```
+BVA — Análisis de Valores Límite
+```
+
+**Texto:**
+```
+Los errores viven en las fronteras.
+El bug típico: un < que debería ser <=
+```
+
+**Diagrama:**
+```
+Rango: 18 a 65
+
+       probar   probar                   probar   probar
+         ↓        ↓                        ↓        ↓
+   ──────17──────18──────────────────────65──────66──────
+         ↑        ↑                        ↑        ↑
+      inválido  válido                  válido   inválido
+```
+
+**Ejemplo del laboratorio:**
+```
+Umbral de volumen: $1,000
+
+Probar: $999.99 → sin bono   (justo antes del límite)
+Probar: $1,000.00 → con bono (exactamente en el límite)
+
+Si el programador escribió > en vez de >=,
+el test de $1,000.00 lo detecta.
+```
+
+---
+
+### SLIDE 7 — Tabla de Decisión
+
+**Título:**
+```
+Tabla de Decisión
+```
+
+**Texto:**
+```
+3 condiciones (sí/no) = 2³ = 8 reglas
+Sin la tabla completa, las combinaciones peligrosas se escapan.
+```
+
+**Tabla (dibujar en la slide):**
+
+| # | ¿Premium? | ¿≥ $1,000? | ¿Cupón? | Descuento |
+|---|-----------|-----------|---------|-----------|
+| R1 | No | No | No | 0% |
+| R2 | No | No | Sí | 5% |
+| R3 | No | Sí | No | 5% |
+| R4 | No | Sí | Sí | 10% |
+| R5 | Sí | No | No | 10% |
+| R6 | Sí | No | Sí | 15% |
+| R7 | Sí | Sí | No | 15% |
+| **R8** | **Sí** | **Sí** | **Sí** | **15% ← tope** |
+
+**Nota al pie (en rojo, debajo de la tabla):**
+```
+⭐ R8 es la regla más valiosa:
+   Premium(10%) + Volumen(5%) + Cupón(5%) = 20%
+   Pero el tope de 15% la recorta.
+   Sin la tabla, NADIE piensa en probar este caso.
+```
+
+---
+
+### SLIDE 8 — Pairwise Testing
+
+**Título:**
+```
+Pairwise Testing: de 54 a ~10
+```
+
+**Texto (lado izquierdo — el problema):**
+```
+Problema:
+  3 navegadores
+  × 3 sistemas
+  × 2 idiomas
+  × 3 roles
+  = 54 combinaciones
+```
+
+**Texto (lado derecho — la solución):**
+```
+Pairwise garantiza que cada PAR
+de valores aparece junto
+al menos una vez.
+
+54 combinaciones → ~10 filas
+~80% menos tests
+~misma detección de defectos
+```
+
+**¿Por qué funciona? (debajo, centrado):**
+```
+La mayoría de defectos son causados por
+la interacción de máximo 2 parámetros.
+```
+
+**Nota de advertencia (en amarillo, al final):**
+```
+⚠️  La herramienta puede dejar pares sin cubrir.
+    En el laboratorio van a descubrir el bug y escribir
+    un test que lo detecte.
+```
+
+---
+
+### SLIDE 9 — Trazabilidad
+
+**Título:**
+```
+Trazabilidad: REQ → TC → DEF
+```
+
+**Diagrama (centro de la slide):**
+```
+ REQUERIMIENTO         CASO DE PRUEBA           DEFECTO
+┌──────────────┐ 1..N ┌─────────────────┐ 0..N ┌──────────┐
+│ REQ-DSC-002  │─────►│ TC-DSC-BVA-004  │─────►│ DEF-017  │
+│ "≥1000 → +5%"│      │ límite $1,000   │      │ off-by-1 │
+└──────────────┘      └─────────────────┘      └──────────┘
+```
+
+**Debajo, las 2 preguntas que responde la matriz:**
+```
+¿Qué REQ no tiene TC?  → hueco de cobertura
+¿Qué TC no tiene REQ?  → test zombie (borrar)
+```
+
+**Nota al pie:**
+```
+La matriz vive en el repo (CSV), no en Excel.
+Se revisa en cada Pull Request junto al código.
+```
+
+**Diseño:** Los 3 recuadros en colores distintos (azul, verde, rojo). Flechas gruesas. Las 2 preguntas en amarillo.
+
+---
+
+### SLIDE 10 — Demo: la función del laboratorio
+
+**Título:**
+```
+Demo: calculate_discount
+```
+
+**Contenido:** Screenshot o fragmento de código de `discount.py`:
+```python
+def calculate_discount(customer_type, order_total, has_coupon):
+    """
+    REQ-DSC-001: premium → +10%; standard → +0%
+    REQ-DSC-002: order_total >= 1000 → +5% (volumen)
+    REQ-DSC-003: has_coupon → +5%
+    REQ-DSC-004: descuento total nunca excede 15%
+    REQ-DSC-005: 0 < order_total <= 10000; si no, ValueError
+    """
+```
+
+**Nota al pie:**
+```
+5 requerimientos. 5 reglas trazables.
+Cada test que escribamos tendrá el ID del REQ que prueba.
+```
+
+**Diseño:** Fondo oscuro tipo IDE. Código en fuente monoespaciada. Los REQ-DSC-* en color destacado.
+
+---
+
+### SLIDE 11 — Estructura del laboratorio
+
+**Título:**
+```
+Estructura del proyecto
+```
+
+**Contenido (árbol de archivos):**
+```
+proyecto-integrador/
+├── trazabilidad/
+│   └── matriz-trazabilidad.csv     ← REQ ↔ TC ↔ DEF
+└── design-lab/                     ← laboratorio de hoy
+    ├── pyproject.toml              ← dependencias
+    ├── data/
+    │   └── decision_table.yaml     ← 8 reglas (datos)
+    ├── design_lab/
+    │   ├── discount.py             ← función a probar
+    │   └── pairwise_matrix.py      ← generador pairwise
+    └── tests/
+        ├── test_equivalence_boundary.py   ← EP + BVA
+        ├── test_decision_table.py         ← tabla de decisión
+        └── test_pairwise.py               ← pairwise
+```
+
+**Nota al pie:**
+```
+Cada archivo tiene una sola responsabilidad.
+Los datos están separados de la lógica.
+```
+
+---
+
+### SLIDE 12 — Comandos
+
+**Título:**
+```
+Comandos del laboratorio
+```
+
+**Contenido (2 columnas):**
+
+| Con `task` (atajo) | Sin `task` (comando completo) |
+|---|---|
+| `task setup` | `cd proyecto-integrador/design-lab && uv sync` |
+| `task test:design` | `cd proyecto-integrador/design-lab && uv run pytest -v` |
+
+**Output esperado (debajo, en fuente monoespaciada):**
+```
+============================= 25 passed in 0.33s ==============================
+```
+
+**Nota:**
+```
+Si ves "25 passed" — tu entorno está listo.
+```
+
+---
+
+### SLIDE 13 — Ejercicio: Login de SauceDemo
+
+**Título:**
+```
+Ejercicio: Diseñar casos para el login
+```
+
+**Screenshot:** Captura de https://www.saucedemo.com mostrando la pantalla de login.
+
+**Usuarios de prueba (tabla):**
+
+| Usuario | Contraseña | Comportamiento |
+|---------|-----------|----------------|
+| `standard_user` | `secret_sauce` | Login exitoso |
+| `locked_out_user` | `secret_sauce` | Error: usuario bloqueado |
+| `problem_user` | `secret_sauce` | Login con glitches |
+| `performance_glitch_user` | `secret_sauce` | Login lento |
+
+**Tu tarea:**
+```
+Editar matriz-trazabilidad.csv:
+  - Completar REQ-LOG-001, 002, 003
+  - Derivar particiones de equivalencia
+  - Construir tabla de decisión (3 condiciones)
+  - Asignar tc_id a cada caso
+```
+
+---
+
+### SLIDE 14 — Mini reto: Pairwise
+
+**Título:**
+```
+Mini reto: Pairwise para matriz web
+```
+
+**Parámetros (tabla):**
+
+| Parámetro | Valores |
+|-----------|--------|
+| Navegador | chromium, firefox, webkit |
+| Pantalla | mobile, tablet, desktop |
+| Tema | light, dark |
+| Rol | admin, user |
+
+**Restricción:**
+```
+admin NO se prueba en mobile
+```
+
+**Total sin pairwise:** 3 × 3 × 2 × 2 = **36 combinaciones**
+
+**Tu test debe verificar:**
+```
+✅ a) El total es menor que 36
+✅ b) La restricción se respeta (ninguna fila tiene admin + mobile)
+✅ c) Todos los pares (pantalla, tema) están cubiertos
+```
+
+---
+
+### SLIDE 15 — Errores comunes
+
+**Título:**
+```
+Errores comunes vs Prácticas correctas
+```
+
+**Tabla (7 filas):**
+
+| ❌ Error común | ✅ Práctica correcta |
+|---|---|
+| Probar solo el camino feliz | Cada valor viene de una técnica y traza a un REQ |
+| Test gigante con 15 asserts | Parametrizado: agregar caso = agregar 1 línea |
+| Datos incrustados en el test | Datos en YAML o CSV versionados en `data/` |
+| Matriz en Excel que nadie actualiza | CSV en el repo, revisado en el Pull Request |
+| "Más tests = más calidad" | Cobertura mínima suficiente: EP + BVA + tabla + pairwise |
+| Ignorar particiones inválidas | `pytest.raises` como caso de primera clase |
+| Copiar y pegar tests | `@parametrize`: el código no se duplica |
+
+**Diseño:** Columna izquierda en rojo suave, columna derecha en verde suave.
+
+---
+
+### SLIDE 16 — Checklist de salida
+
+**Título:**
+```
+Antes de irte, verifica:
+```
+
+**Checklist (4 items con checkbox):**
+```
+☐ uv run pytest -v → 25 passed (EP, BVA, tabla, pairwise)
+☐ matriz-trazabilidad.csv → REQ-LOG-* completados con técnica
+☐ Mini reto pairwise → implementado y pasando
+☐ Puedes explicar en 1 min por qué DT-R8 no existiría sin tabla
+```
+
+**Diseño:** Texto grande, un item por línea. Los checkboxes vacíos para que mentalmente marquen.
+
+---
+
+### SLIDE 17 — Próxima sesión
+
+**Título:**
+```
+Sesión 2: De diseño a código
+```
+
+**Texto:**
+```
+Lo que diseñaste hoy se convierte en
+pruebas automatizadas de la UI de SauceDemo.
+
+Patrones: Page Object Model · Screenplay · DRY
+Datos: JSON · YAML · CSV · Fixtures
+
+La matriz crece: TC-LOG-* pasan de DISEÑO → PASS
+```
+
+**Diseño:** Simple, sin diagramas. Solo las 3 líneas de texto. El instructor cierra con entusiasmo.
 
 ---
 

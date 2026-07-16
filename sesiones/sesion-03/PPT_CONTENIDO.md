@@ -101,6 +101,9 @@ npx --yes newman run postman/s3_crud_jsonplaceholder.postman_collection.json \
 ### Slide 14 — Conexión con CI/CD (10 min)
 - Mismo comando → GitHub Actions lo corre en cada push (Sesión 5)
 - Exit code ≠ 0 → pipeline rojo → el release **no sale**
+```bash
+- npx --yes newman run <colección> -e <env> ; echo "exit code: $LASTEXITCODE"
+```
 - Eso es una **puerta de calidad** (*quality gate*) — el corazón del proyecto integrador
 
 ---

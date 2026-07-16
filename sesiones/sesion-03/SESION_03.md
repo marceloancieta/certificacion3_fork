@@ -201,8 +201,13 @@ npx newman run <colección> -e <env> --iteration-count 3
 npx newman run <colección> -e <env> --bail
 
 # Generar reporte HTML (requiere el reporter extra)
+# Si usas cmd.exe, el comando sigueinte funciona en PowerShell necesitas las comillas simples.
 npx --yes newman run <colección> -e <env> \
   -r cli,htmlextra --reporter-htmlextra-export reporte.html
+
+#en PowerShell necesitas las comillas simples.
+npx --yes newman run <colección> -e <env>  \
+  -r 'cli,htmlextra' -reporter-htmlextra-export reporte.html
 ```
 
 ### 5. El atajo del curso: Taskfile

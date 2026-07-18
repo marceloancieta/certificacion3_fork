@@ -1,0 +1,14 @@
+[
+  {
+    "caso": "user_normal",
+    "payload": { "name": "Marcelo Ancieta", "username": "mancieta", "email": "marcelo.ancieta@example.com" }
+  },
+  {
+    "caso": "nombre_con_acentos",
+    "payload": { "name": "María José Ñañez", "username": "mjnanez", "email": "maria.nanez@example.com" }
+  },
+  {
+    "caso": "email_con_subdominio",
+    "payload": { "name": "QA Automation", "username": "qa_bot", "email": "qa.bot@testing.curso.example.com" }
+  }
+]

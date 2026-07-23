@@ -1,28 +1,4 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-*.egg-info/
-
-# pytest
-.pytest_cache/
-
-# uv
-.uv/
-
-# IDE / editor
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Qoder
-.qoder/
-
-# Instructor-only guides (NOT for students)
-sesiones/**/GUIA_*.md
+# Guías privadas del instructor (no publicar a estudiantes)
+sesiones/**/GUIA_INSTRUCTOR.md
+GUIA_INSTRUCTOR*.md
+/.qoder

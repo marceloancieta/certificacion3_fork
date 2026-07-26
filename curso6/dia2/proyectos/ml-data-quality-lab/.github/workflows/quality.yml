@@ -1,28 +1,35 @@
-name: ml-data-quality
+name: ML Data Quality CI
 
 on:
   push:
-    paths:
-      - "curso6/dia2/proyectos/ml-data-quality-lab/**"
+    branches: [main]
   pull_request:
-    paths:
-      - "curso6/dia2/proyectos/ml-data-quality-lab/**"
-  workflow_dispatch:
+    branches: [main]
 
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: curso6/dia2/proyectos/ml-data-quality-lab
     steps:
       - uses: actions/checkout@v4
+
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest -v
+
+      - name: Run full pipeline
+        run: uv run python -m src.run_pipeline
+
+      - name: Upload pipeline report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          python-version: "3.12"
-      - name: Sync and test
-        run: |
-          uv sync
-          uv run pytest -v
-          uv run python -m src.run_pipeline
+          name: pipeline-report
+          path: data/pipeline_report.json

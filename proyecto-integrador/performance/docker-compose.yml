@@ -49,3 +49,30 @@ services:
     depends_on:
       target:
         condition: service_healthy
+
+  k6-swapi-smoke:
+    image: grafana/k6:1.8.0
+    container_name: curso-k6-swapi-smoke
+    volumes:
+      - ./k6:/scripts:ro
+    environment:
+      BASE_URL: https://swapi.info/api
+    command: ["run", "/scripts/swapi/smoke.js"]
+
+  k6-swapi-load:
+    image: grafana/k6:1.8.0
+    container_name: curso-k6-swapi-load
+    volumes:
+      - ./k6:/scripts:ro
+    environment:
+      BASE_URL: https://swapi.info/api
+    command: ["run", "/scripts/swapi/load.js"]
+
+  k6-swapi-fail:
+    image: grafana/k6:1.8.0
+    container_name: curso-k6-swapi-fail
+    volumes:
+      - ./k6:/scripts:ro
+    environment:
+      BASE_URL: https://swapi.info/api
+    command: ["run", "/scripts/swapi/fail_demo.js"]

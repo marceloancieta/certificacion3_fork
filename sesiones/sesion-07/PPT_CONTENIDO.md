@@ -196,7 +196,7 @@ uv run pytest -v
 ```
 - Página `bad_page.html` **hecha para fallar**
 - Axe lista violaciones (impact, id, description)
-- **Esperado:** el test encuentra ≥1 violación (eso es éxito de la demo)
+- **Esperado:** pytest **FAILED** — el gate exige 0 violaciones (`assert total == 0`)
 
 ### Slide 21 — Lighthouse y el mapa a11y (4 min)
 | Herramienta | Nota |

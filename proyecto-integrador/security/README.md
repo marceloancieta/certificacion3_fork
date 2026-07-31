@@ -31,6 +31,10 @@ uv run playwright install chromium
 uv run pytest -v
 ```
 
+`bad_page.html` está rota a propósito. El test es un **gate** (`assert total == 0`):
+pytest sale **FAILED** y escribe el reporte en `reports/axe-bad-page.html` antes de fallar.
+Eso es correcto — no uses `assert len(violations) >= 1` (dejaría la suite verde con fallos).
+
 ## Detener
 
 ```bash

@@ -174,10 +174,29 @@ Con esos números podés hablar con liderazgo sin improvisar.
 
 ```
 Exporter (:8000/metrics)  →  Prometheus (:9090)  →  Grafana (:3000)
-     datos crudos              guarda + alertas         lo que se mira
+     publica números QA         guarda + alerta         lo que se mira
 ```
 
-- **Kibana / Loki** (concepto): correlacionar métricas con logs (ej. flake subió después de un deploy).
+#### ¿Qué es el Exporter? (importante)
+
+En castellano llano: es un **programita que publica las métricas de QA** en una URL para que otro sistema las lea.
+
+- En el lab: contenedor `qa-exporter` → `http://localhost:8000/metrics`
+- Ahí vas a ver texto plano (no una UI bonita) con líneas como `qa_flake_rate{service="payments"} 0.11`
+- Se llama **exporter** porque **exporta** métricas en un formato que Prometheus entiende
+- En la vida real ese rol lo puede cumplir: tu pipeline de CI, Allure, TestRail, o un script que calcule flake/leakage. Aquí lo simulamos para no depender de un sistema de QA externo
+
+#### ¿Qué hacen los otros dos?
+
+| Pieza | Puerto | Rol |
+|-------|--------|-----|
+| **Exporter** | 8000 | Fabrica/publica los números (`/metrics`) |
+| **Prometheus** | 9090 | Cada ~10 s hace **scrape** (“ir a buscar”) al exporter, guarda histórico y dispara **alertas** |
+| **Grafana** | 3000 | Solo **pinta** lo que Prometheus ya tiene (dashboard) |
+
+**Scrape** = Prometheus entra periódicamente a la URL del exporter y se lleva una foto de los valores actuales.
+
+- **Kibana / Loki** (concepto, no los levantamos hoy): correlacionar métricas con logs (ej. flake subió después de un deploy).
 
 ### 2. Métricas que publica el exporter
 
@@ -188,11 +207,7 @@ Exporter (:8000/metrics)  →  Prometheus (:9090)  →  Grafana (:3000)
 
 Servicios demo: **auth · payments · catalog · notifications**
 
-### 3. Prepará el Reto 1
-
-Si aún no levantaste el stack, volvé a la sección [Antes de empezar](#antes-de-empezar) y ejecutá los comandos.
-
-Confirmá métricas:
+Probá ahora (con el stack arriba):
 
 ```bash
 # macOS / Linux / Git Bash
@@ -201,6 +216,12 @@ curl -sf http://127.0.0.1:8000/metrics | grep qa_flake_rate
 # Windows PowerShell
 curl.exe -sf http://127.0.0.1:8000/metrics | Select-String qa_flake_rate
 ```
+
+Si ves líneas `qa_flake_rate{service=...}`, el exporter está vivo.
+
+### 3. Prepará el Reto 1
+
+Si aún no levantaste el stack, volvé a [Antes de empezar](#antes-de-empezar) y ejecutá `generate_history` + `docker compose up`.
 
 ---
 

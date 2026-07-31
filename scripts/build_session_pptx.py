@@ -50,13 +50,16 @@ def parse_slides(markdown: str) -> list[dict[str, object]]:
                 in_code = not in_code
                 continue
             if in_code:
-                if line.strip():
+                if line.strip() and not line.strip().startswith("#"):
                     code_lines.append(line.rstrip())
                 continue
             if line.startswith("---") or line.startswith("## "):
                 break
             if line.startswith("- "):
                 bullets.append(line[2:].strip())
+            elif re.match(r"^\d+\.\s+", line):
+                # Listas numeradas (el bug que vació OWASP Top 10 en S7).
+                bullets.append(re.sub(r"^\d+\.\s+", "", line).strip())
             elif line.startswith("| ") and not re.match(r"^\|\s*-+", line):
                 cells = [c.strip() for c in line.strip("|").split("|")]
                 if cells and cells[0].lower() not in {
@@ -66,10 +69,16 @@ def parse_slides(markdown: str) -> list[dict[str, object]]:
                     "evento",
                     "script",
                     "síntoma",
+                    "plataforma",
+                    "comando",
+                    "resultado",
+                    "carpeta",
+                    "task",
                 }:
                     bullets.append(" — ".join(cells))
-        if code_lines:
-            bullets.append("Código: " + " | ".join(code_lines[:5]))
+        # Código como bullets cortos (legibles en proyector), no un solo "Código: a|b|c".
+        for cl in code_lines[:4]:
+            bullets.append(cl.strip())
         slides.append({"number": number, "title": title, "bullets": bullets[:8]})
     return slides
 

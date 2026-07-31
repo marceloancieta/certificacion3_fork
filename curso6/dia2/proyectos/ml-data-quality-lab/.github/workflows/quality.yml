@@ -1,4 +1,4 @@
-name: ML Data Quality CI
+name: ML Data Quality CI 
 
 on:
   push:

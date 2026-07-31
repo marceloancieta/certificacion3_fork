@@ -190,6 +190,10 @@ Prometheus (+ alertas)
     ↓ query
 Grafana (dashboard)
 ```
+- **Exporter** = programita que **publica** números QA en `:8000/metrics` (texto plano)
+- En la vida real: CI / Allure / script; aquí lo simulamos
+- **Prometheus** = guarda histórico + evalúa alertas (scrape cada ~10 s)
+- **Grafana** = pinta el dashboard que se mira en clase
 - Kibana/Loki: logs y correlación (concepto)
 - Puertos lab: **8000 / 9090 / 3000**
 

@@ -115,7 +115,7 @@ proyecto-integrador/security/
 ```bash
 cd proyecto-integrador/security
 # Importante: copiá la política al workdir (el script run_baseline.py ya lo hace)
-cp zap/rules.tsv reports/rules.tsv   # Windows: Copy-Item zap\rules.tsv reports\rules.tsv
+cp zap/rules.tsv reports/rules.tsv
 docker compose up -d --wait juiceshop
 docker compose run --rm zap-baseline
 ```
@@ -244,7 +244,9 @@ uv run pytest -v
 
 La página `bad_page.html` tiene problemas **a propósito** (imagen sin `alt`, contraste malo, controles sin nombre accesible, etc.).
 
-**Resultado esperado:** Axe reporta **una o más violaciones**. Eso es un éxito de la demo: el detector funciona.
+**Resultado esperado:** Axe encuentra violaciones (p. ej. **7**) y pytest sale **FAILED** (`assert total == 0`). Eso es el gate: si hay fallos de a11y, la suite **no** queda verde. Los reportes HTML/JSON se escriben *antes* del assert para poder leerlos en clase.
+
+> Ojo: un `assert len(violations) >= 1` dejaría la suite verde cuando la página está rota. Eso no es un gate; es una demo engañosa. Acá el assert exige **cero** violaciones.
 
 Así queda plantada la **Etapa 7** (accesibilidad) del gate: un chequeo automatizable en CI, igual que ZAP.
 

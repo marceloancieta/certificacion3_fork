@@ -1,4 +1,4 @@
-"""Model validation: precision, bias/fairness proxy and data drift."""
+"""Model validation: precision, bias/fairness proxy and data drift.""" 
 
 from __future__ import annotations
 

@@ -24,20 +24,24 @@ SESSION_LABELS = {
     "sesion-06": "Sesión 6 · Performance K6",
     "sesion-07": "Sesión 7 · Seguridad ZAP + Axe",
     "sesion-08": "Sesión 8 · Mantenimiento y Mutación",
+    "sesion-09": "Sesión 9 · Móvil y Regresión Visual",
+    "sesion-10": "Sesión 10 · Release Gate · Cierre",
 }
 
 
 def parse_slides(markdown: str) -> list[dict[str, object]]:
     slides: list[dict[str, object]] = []
-    chunks = re.split(r"\n### (Slide \d+ —[^\n]+)\n", markdown)
+    chunks = re.split(r"\n### (Slide \d+[a-z]? —[^\n]+)\n", markdown)
     for i in range(1, len(chunks), 2):
         heading = chunks[i].strip()
         body = chunks[i + 1] if i + 1 < len(chunks) else ""
-        title_match = re.match(r"Slide (\d+) — (.+?)(?:\s*\(\d+ min\))?$", heading)
+        title_match = re.match(
+            r"Slide (\d+)([a-z]?) — (.+?)(?:\s*\(\d+ min\))?$", heading
+        )
         if not title_match:
             continue
-        number = int(title_match.group(1))
-        title = title_match.group(2).strip()
+        slide_id = title_match.group(1) + title_match.group(2)
+        title = title_match.group(3).strip()
 
         bullets: list[str] = []
         code_lines: list[str] = []
@@ -79,7 +83,7 @@ def parse_slides(markdown: str) -> list[dict[str, object]]:
         # Código como bullets cortos (legibles en proyector), no un solo "Código: a|b|c".
         for cl in code_lines[:4]:
             bullets.append(cl.strip())
-        slides.append({"number": number, "title": title, "bullets": bullets[:8]})
+        slides.append({"slide_id": slide_id, "title": title, "bullets": bullets[:8]})
     return slides
 
 
@@ -97,7 +101,7 @@ def clean_md(text: str) -> str:
 
 
 def add_slide(
-    prs: Presentation, number: int, title: str, bullets: list[str], session_label: str
+    prs: Presentation, slide_id: str, title: str, bullets: list[str], session_label: str
 ) -> None:
     slide = prs.slides.add_slide(prs.slide_layouts[6])
 
@@ -116,7 +120,7 @@ def add_slide(
     meta = slide.shapes.add_textbox(Inches(0.6), Inches(1.25), Inches(12.1), Inches(0.3))
     style_run(
         meta.text_frame.paragraphs[0].add_run(),
-        f"{session_label} · Slide {number}",
+        f"{session_label} · Slide {slide_id}",
         size=12,
         color=ACCENT_COLOR,
     )
@@ -159,7 +163,7 @@ def build_session(session_dir: Path) -> Path:
     for slide in slides:
         add_slide(
             prs,
-            int(slide["number"]),
+            str(slide["slide_id"]),
             str(slide["title"]),
             list(slide["bullets"]),
             label,
@@ -174,12 +178,27 @@ def main() -> None:
     parser.add_argument(
         "session",
         nargs="?",
-        choices=["sesion-05", "sesion-06", "sesion-07", "sesion-08", "all"],
+        choices=[
+            "sesion-05",
+            "sesion-06",
+            "sesion-07",
+            "sesion-08",
+            "sesion-09",
+            "sesion-10",
+            "all",
+        ],
         default="all",
     )
     args = parser.parse_args()
     names = (
-        ["sesion-05", "sesion-06", "sesion-07", "sesion-08"]
+        [
+            "sesion-05",
+            "sesion-06",
+            "sesion-07",
+            "sesion-08",
+            "sesion-09",
+            "sesion-10",
+        ]
         if args.session == "all"
         else [args.session]
     )

@@ -88,7 +88,7 @@ Los hitos prácticos se integran al proyecto: criterio CI + API + K6 en las Sesi
 | **S7** ✅ | 3h | **Seguridad y otras no funcionales:** OWASP ZAP baseline (Juice Shop local) · mapa Burp · Axe/Lighthouse (WCAG) · mapa BrowserStack/SauceLabs/LambdaTest · **lab sincronizado en clase** (sin reto aparte) | Etapas 6-7: `security/` con ZAP + Axe — práctica entregada en sesión |
 | **S8** ✅ | 3h | **Mantenimiento:** reducción de pruebas inestables (*flaky*), refactorización, anotaciones condicionales, separación lógica/datos, versionado y trazabilidad · **Pruebas de mutación** (*Mutation Testing*) con **cosmic-ray** (Python; mapa de Stryker JS/TS y PIT Java) · selectores robustos + reparación con IA generativa · mapa de autorreparación (Healenium/Alumnium) · **lab sincronizado en clase** | Etapa 8: gate de puntaje de mutación (*mutation score*) sobre `maintenance-lab/` + demo de flaky y selectores robustos |
 | **S9** ✅ | 3h | **Móviles y escritorio:** mapa Appium/Maestro/Espresso/XCUITest/FlaUI/Pywinauto · híbrido vs nativo · emulador vs real · **Regresión visual** con baselines PNG (Playwright) + mapa Applitools/Percy · responsive y modo oscuro · **lab sincronizado** | Etapa 9: `mobile-visual-lab/` — smoke viewport móvil + gate visual (diff → rojo) |
-| **S10** ✅ | 2h | **Cierre:** integración final del flujo automatizado, demo del juez de métricas, revisión de retos, evaluación rápida y retrospectiva | **Puerta de Calidad de Release** (`release-gate/`) + retrospectiva |
+| **S10** ✅ | 2h | **Cierre:** integración final del flujo automatizado, lab del juez (escenarios JSON + desbloqueo en vivo + forzar fallos + arco completo) | **Puerta de Calidad de Release** (`release-gate/`) |
 
 **Total: 9×3h + 1×2h = 29 horas.**
 

@@ -170,7 +170,7 @@ tasks:
 
   # ── Sesión 10: Release Gate (juez único) ──────────────────────────────────
   test:gate:
-    desc: "S10 — Tests del juez release-gate (6 passed)"
+    desc: "S10 — Tests del juez release-gate (16 passed)"
     dir: "{{.GATE_LAB}}"
     cmds:
       - uv sync --group dev
@@ -189,3 +189,17 @@ tasks:
     cmds:
       - uv sync --group dev
       - uv run python run_gate.py metrics/blocked_mutation.json
+
+  test:gate:demos:
+    desc: "S10 — Arco completo: pytest + todos los escenarios JSON"
+    dir: "{{.GATE_LAB}}"
+    cmds:
+      - uv sync --group dev
+      - uv run python scripts/run_all_demos.py
+
+  test:gate:force-fail:
+    desc: "S10 — Forzar fallos: incompleto + inválido + AssertionError"
+    dir: "{{.GATE_LAB}}"
+    cmds:
+      - uv sync --group dev
+      - uv run python scripts/demo_force_fail.py

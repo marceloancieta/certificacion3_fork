@@ -27,8 +27,7 @@ def pass_rate(passed: int, total: int) -> float:
     Caso borde: si total es 0, devolvé 1.0 (nada que fallar).
     Ejemplo: pass_rate(95, 100) -> 0.95
     """
-    # TODO: implementar
-    raise NotImplementedError
+    return passed / total if total else 1.0
 
 
 def p95_ok(p95_ms: float, threshold_ms: float | None = None) -> bool:
@@ -37,8 +36,9 @@ def p95_ok(p95_ms: float, threshold_ms: float | None = None) -> bool:
     Pasa si p95_ms <= threshold. Por defecto usá THRESHOLDS["p95_ms"].
     Ejemplo: p95_ok(180, 500) -> True; p95_ok(800, 500) -> False
     """
-    # TODO: implementar
-    raise NotImplementedError
+    if threshold_ms is None:
+        threshold_ms = THRESHOLDS["p95_ms"]
+    return p95_ms <= threshold_ms
 
 
 def zap_gate(fail_new: int, warn_new: int = 0, fail_limit: int | None = None) -> bool:
@@ -48,8 +48,9 @@ def zap_gate(fail_new: int, warn_new: int = 0, fail_limit: int | None = None) ->
     warn_new se ignora a propósito (no tumba el job).
     Ejemplo: zap_gate(0, 7) -> True; zap_gate(1, 0) -> False
     """
-    # TODO: implementar
-    raise NotImplementedError
+    if fail_limit is None:
+        fail_limit = THRESHOLDS["zap_fail_new"]
+    return fail_new <= fail_limit
 
 
 def mutation_score(killed: int, total_mutants: int) -> float:
@@ -58,8 +59,7 @@ def mutation_score(killed: int, total_mutants: int) -> float:
     Caso borde: si total_mutants es 0, devolvé 1.0.
     Ejemplo: mutation_score(45, 50) -> 0.90
     """
-    # TODO: implementar
-    raise NotImplementedError
+    return killed / total_mutants if total_mutants else 1.0
 
 
 def a11y_critical_ok(critical_violations: int) -> bool:
@@ -68,8 +68,7 @@ def a11y_critical_ok(critical_violations: int) -> bool:
     Pasa si critical_violations <= THRESHOLDS["a11y_critical"] (0).
     Ejemplo: a11y_critical_ok(0) -> True; a11y_critical_ok(1) -> False
     """
-    # TODO: implementar
-    raise NotImplementedError
+    return THRESHOLDS["a11y_critical"] >= critical_violations
 
 
 def release_gate(metrics: dict) -> dict:
@@ -88,8 +87,20 @@ def release_gate(metrics: dict) -> dict:
     - Valor exactamente en el umbral PASA (falla solo si lo cruza).
     - passed es True solo si TODOS los checks son True.
     """
-    # TODO: implementar
-    raise NotImplementedError
+    pass_rate_ok = metrics["pass_rate"] >= THRESHOLDS["pass_rate"]
+    perf_ok = p95_ok(metrics["p95_ms"])
+    security_ok = zap_gate(metrics["zap_fail_new"])
+    mutation_ok = metrics["mutation_score"] >= THRESHOLDS["mutation_score"]
+    accessibility_ok = a11y_critical_ok(metrics["a11y_critical"])
+
+    checks = {
+        "pass_rate": pass_rate_ok,
+        "p95": perf_ok,
+        "zap": security_ok,
+        "mutation": mutation_ok,
+        "a11y": accessibility_ok,
+    }
+    return {"checks": checks, "passed": all(checks.values())}
 
 
 if __name__ == "__main__":
